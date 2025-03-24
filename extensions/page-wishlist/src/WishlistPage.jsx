@@ -321,14 +321,17 @@ function WishlistPage() {
                     >
                       Remove
                     </Button>
+                    <Link to={`${shop_domain}/products/${product.handle}`}>
                     <Button
-                      
-                      variant="primary"
-                      size="micro"
-                      onPress={() => console.log(`Add to cart ${product.id}`)}
-                    >
-                     Product Page
-                    </Button>
+                  variant="primary"
+                  size="micro"
+                  // onPress={() => {
+                  //   api.navigate(`${shop_domain}/products/${product.handle}`);
+                  // }}
+                >
+                  Product Page
+                </Button>
+                </Link>
                   </InlineStack>
                 </BlockStack>
               </View>

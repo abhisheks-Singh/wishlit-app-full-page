@@ -78,7 +78,7 @@ $(document).ready(async function () {
 
       const responseData = await response.json();
       console.log("Response:", responseData);
-      alert("Data sent successfully!");
+      alert("Product added to wishlist!");
       
       // Recheck and update button text after action
       await checkWishlist();
