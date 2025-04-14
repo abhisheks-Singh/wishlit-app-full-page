@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "a07ef3059ea32ae123f11367cc1721ce"
-application_url = "https://a654-106-219-158-119.ngrok-free.app"
+application_url = "https://ce13-106-219-158-171.ngrok-free.app"
 embedded = true
 name = "wishlist-app"
 
@@ -18,16 +18,16 @@ api_version = "2025-01"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products, read_products, read_customers, write_customers, read_files, write_files, write_metaobject_definitions,  customer_read_customers, customer_read_orders ,customer_write_customers, unauthenticated_read_customers,write_metaobject_definitions,write_metaobjects,write_products,write_themes"
+scopes = "write_cart_transforms, write_products, read_products, read_customers, write_customers, read_files, write_files, write_metaobject_definitions,  customer_read_customers, customer_read_orders ,customer_write_customers, unauthenticated_read_customers,write_metaobject_definitions,write_metaobjects,write_products,write_themes"
 
 [auth]
 redirect_urls = [
-  "https://a654-106-219-158-119.ngrok-free.app/auth/callback",
-  "https://a654-106-219-158-119.ngrok-free.app/auth/shopify/callback",
-  "https://a654-106-219-158-119.ngrok-free.app/api/auth/callback"
+  "https://ce13-106-219-158-171.ngrok-free.app/auth/callback",
+  "https://ce13-106-219-158-171.ngrok-free.app/auth/shopify/callback",
+  "https://ce13-106-219-158-171.ngrok-free.app/api/auth/callback"
 ]
 
 [build]
 dev_store_url = "abhishek-dev-storee.myshopify.com"
-automatically_update_urls_on_dev = true
+automatically_update_urls_on_dev = false
 include_config_on_deploy = true

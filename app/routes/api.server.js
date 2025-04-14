@@ -29,43 +29,45 @@ const getAccessToken = async (shop) => {
     return session.accessToken; // Adjust according to how you store the access token in your session
 };
 
+
+
+// const corsHeaders = {
+//   "Access-Control-Allow-Origin": "*",
+//   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+//   "Access-Control-Allow-Headers": "Content-Type, ngrok-skip-browser-warning",
+// };
+
 export async function loader({ request }) {
-    console.log("Loader function called.");
-    const data = { message: "Data from loader" };  
-
-    const url = new URL(request.url);
-  const searchParams = url.searchParams; 
-  const shop = searchParams.get("shop"); 
-  const shopDomain = shop.replace(/^https?:\/\//, '');
-  const customerId = searchParams.get("customer_Id"); 
-
-//   const formattedCustomerId = `gid://shopify/Customer/${customerId}`;
-
-  console.log("Shop Domain:", shop, 'shop domain without http ', shopDomain);
-
-  console.log("Customer ID:", customerId);
-  const accessToken = await getAccessToken(shopDomain);
-  console.log("access token", accessToken);
-
-  const wishlist_product_ids = await getMetafieldValue(shopDomain, accessToken, customerId, namespace, key);
-  console.log("Wishlist product ids:", wishlist_product_ids);
-
-
-//     const headersObject = {};
-//   request.headers.forEach((value, key) => {
-//       headersObject[key] = value;
-//   });
-
-//   // Log all headers
-//   console.log('All Headers:', headersObject);   
-
-    return new Response(JSON.stringify(wishlist_product_ids), {
-        status: 200,
-        headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Content-Type": "application/json",
-        },
+  console.log("fn called ");
+  if (request.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, ngrok-skip-browser-warning",
+      },
     });
+  }
+
+  // Your logic
+  const url = new URL(request.url);
+  const shop = url.searchParams.get("shop");
+  const shopDomain = shop.replace(/^https?:\/\//, '');
+  const customerId = url.searchParams.get("customer_Id");
+
+  const accessToken = await getAccessToken(shopDomain);
+  const wishlist_product_ids = await getMetafieldValue(shopDomain, accessToken, customerId, namespace, key);
+
+  return cors(
+    request,
+    new Response(JSON.stringify(wishlist_product_ids), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+  );
 }
 
 async function checkMetafieldDefinition(shop, access_token) {

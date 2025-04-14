@@ -1,0 +1,27 @@
+.main-container-home{
+    margin-left: 15px;
+    max-width: 60rem;
+}
+
+.margin-container{
+    padding-left: 1.5rem;
+    padding-top: 1.5rem;
+    max-width: 42rem;
+  }
+
+  .font-semibold {
+    font-weight: 700;
+    font-size: 1rem;
+  }
+  .prose-lg {
+    font-size: 1.125rem;
+    line-height: 1.7777778;
+  }
+
+  .font-bold {
+    font-weight: 700;
+    font-size: 17px;
+  }
+  .tracking-wide {
+    letter-spacing: .025em;
+  }

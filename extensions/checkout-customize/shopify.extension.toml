@@ -1,0 +1,76 @@
+# Learn more about configuring your checkout UI extension:
+# https://shopify.dev/api/checkout-extensions/checkout/configuration
+
+# The version of APIs your extension will receive. Learn more:
+# https://shopify.dev/docs/api/usage/versioning
+api_version = "2025-01"
+
+[[extensions]]
+name = "checkout-customize"
+handle = "checkout-customize"
+type = "ui_extension"
+
+
+# Controls where in Shopify your extension will be injected,
+# and the file that contains your extension’s source code. Learn more:
+# https://shopify.dev/docs/api/checkout-ui-extensions/unstable/extension-targets-overview
+
+[[extensions.targeting]]
+module = "./src/Checkout.jsx"
+target = "purchase.checkout.block.render"
+
+[[extensions.targeting]]
+module = "./src/FormData.jsx" 
+target = "purchase.checkout.delivery-address.render-after"
+
+[extensions.capabilities]
+# Gives your extension access to directly query Shopify’s storefront API.
+# https://shopify.dev/docs/api/checkout-ui-extensions/unstable/configuration#api-access
+api_access = true
+
+# Gives your extension access to make external network calls, using the
+# JavaScript `fetch()` API. Learn more:
+# https://shopify.dev/docs/api/checkout-ui-extensions/unstable/configuration#network-access
+network_access = true
+
+# Loads metafields on checkout resources, including the cart,
+# products, customers, and more. Learn more:
+# https://shopify.dev/docs/api/checkout-ui-extensions/unstable/configuration#metafields
+
+# [[extensions.metafields]]
+# namespace = "my_namespace"
+# key = "my_key"
+# [[extensions.metafields]]
+# namespace = "my_namespace"
+# key = "my_other_key"
+
+# Defines settings that will be collected from merchants installing
+# your extension. Learn more:
+# https://shopify.dev/docs/api/checkout-ui-extensions/unstable/configuration#settings-definition
+
+ [extensions.settings]
+fields = [
+    { key = "content_type", name = "Content Type", type = "single_line_text_field", label = "Enter the content type", validations = [
+        { name = "choices", value = "[\"plain text\", \"border box\", \"subdued box\", \"info\", \"success\", \"warning\", \"critical\", \"upsell\" ,\"image\"]" }
+      ] },
+    { key = "title", name = "Block Title", type = "single_line_text_field", label = "Enter the block title" },
+    { key = "description", name = "Description", type = "multi_line_text_field", label = "Enter the description", description="Enter the main content for the block" },
+    { key = "font_size", name = "Description font size", type = "single_line_text_field", label = "Set font size", description = "Choose the font size for the description text.", validations = [
+        { name = "choices", value = "[\"base\", \"extraSmall\", \"small\", \"medium\", \"large\", \"extraLarge\"]" }
+      ] },
+    { key = "alignment", name = "Description font alignment", type = "single_line_text_field", label = "Set text alignment", description="Start is recommended when using titles. Setting does not apply on banners.", validations = [
+        { name = "choices", value = "[\"start\", \"center\", \"end\"]" }
+      ] },
+    { key = "appearance", name = "Description font appearance", type = "single_line_text_field", description = "Base is recommended. Setting does not apply on banners.", validations = [
+        { name = "choices", value = "[\"accent\", \"info\", \"warning\", \"success\", \"subdued\", \"bold\"]" }
+      ] },
+    { key = "collapsible", name = "Show collapsible", type = "boolean", description="If true, collapses the description"}, 
+    { key = "image_url", name = "Image URL", type = "single_line_text_field", label = "Enter Image URL", description = "Provide the URL of the image to display." }
+
+]
+
+# [[extensions.settings.fields]]
+# key = "banner_title"
+# type = "single_line_text_field"
+# name = "Banner title"
+# description = "Enter a title for the banner"

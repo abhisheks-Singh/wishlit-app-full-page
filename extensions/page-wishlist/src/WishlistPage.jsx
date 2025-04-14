@@ -11,22 +11,22 @@ import {
   Button,
   useCartLines,
   useCustomer,
-  Card, 
+  Card,
   TextBlock,
   Banner,
   View,
   useApi,
+  InlineLayout,
 } from "@shopify/ui-extensions-react/customer-account";
 import { useEffect, useState } from "react";
 
-export default reactExtension(
-  "customer-account.page.render",
-  () => <WishlistPage />
-);
+export default reactExtension("customer-account.page.render", () => (
+  <WishlistPage />
+));
 
 function WishlistPage() {
   const [data, setData] = useState();
-  const app_url = 'https://a654-106-219-158-119.ngrok-free.app';
+  const app_url = "https://ce13-106-219-158-171.ngrok-free.app";
   // const {query}  = useApi();
   const api = useApi();
   const { i18n } = useApi();
@@ -35,10 +35,8 @@ function WishlistPage() {
   const [shop_domain, setShopDomain] = useState();
   const [wishlistProductIds, setWishlistProductIds] = useState([]);
   const [wishlistProducts, setWishlistProducts] = useState([]);
-  // console.log('api', api.authenticatedAccount.customer.current.id, 'customer id ', customer_id); 
-  console.log('shop domain', shop_domain);
-
-
+  // console.log('api', api.authenticatedAccount.customer.current.id, 'customer id ', customer_id);
+  console.log("shop domain", shop_domain);
 
   // const { buyerIdentity } = useApi();
   // const customer = buyerIdentity.customer;
@@ -60,13 +58,13 @@ function WishlistPage() {
         const { data, errors } = response;
 
         if (errors) {
-          console.error('GraphQL Errors:', errors);
+          console.error("GraphQL Errors:", errors);
         } else {
           setData(data);
           setShopDomain(data.shop.primaryDomain.url);
         }
       } catch (error) {
-        console.error('Network Error:', error);
+        console.error("Network Error:", error);
       }
     };
 
@@ -75,10 +73,14 @@ function WishlistPage() {
 
   console.log("data: ", JSON.stringify(data));
 
-  console.log('api', api.authenticatedAccount.customer.current.id, 'customer id ', customer_id, 'shop domain url ', shop_domain);
-
-
-
+  console.log(
+    "api",
+    api.authenticatedAccount.customer.current.id,
+    "customer id ",
+    customer_id,
+    "shop domain url ",
+    shop_domain,
+  );
 
   const [wishlistItems, setWishlistItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -87,53 +89,60 @@ function WishlistPage() {
   const fetchWishlist = async () => {
     try {
       const response = await fetch(
-          `${app_url}/api/server?shop=${shop_domain}&customer_Id=${customer_id}`,
-          {
-              headers: {
-                  'ngrok-skip-browser-warning': 'true' // Add this header to skip the warning page
-              }
-          }
+        `${app_url}/api/server?shop=${shop_domain}&customer_Id=${customer_id}`,
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "true", // Add this header to skip the warning page
+          },
+        },
       );
-  
+
       if (!response.ok) {
-          const errorText = await response.text(); // Get error message from response
-          throw new Error(`Failed to fetch wishlist: ${errorText}`);
+        const errorText = await response.text(); // Get error message from response
+        throw new Error(`Failed to fetch wishlist: ${errorText}`);
       }
-  
+
       const data = await response.json();
       const parsedWishlistIds = JSON.parse(data);
       setWishlistProductIds(parsedWishlistIds);
-      console.log('Fetched data:', data, 'parsed product ids ', parsedWishlistIds);
-  }
-    catch (err) {
-        console.error('Error fetching wishlist:', err); // Log detailed error
-        setError(err.message);
+      console.log(
+        "Fetched data:",
+        data,
+        "parsed product ids ",
+        parsedWishlistIds,
+      );
+    } catch (err) {
+      console.error("Error fetching wishlist:", err); // Log detailed error
+      setError(err.message);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-};
-
+  };
 
   useEffect(() => {
-    if (shop_domain) { // Only call fetchWishlist if shop_domain is defined
+    if (shop_domain) {
+      // Only call fetchWishlist if shop_domain is defined
       fetchWishlist();
     }
-  }, [shop_domain]); 
+  }, [shop_domain]);
 
-  // products data : 
+  // products data :
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log('Wishlist product IDs:', wishlistProductIds);
-      
+      console.log("Wishlist product IDs:", wishlistProductIds);
+
       // Ensure there are valid IDs
-      const validWishlistProductIds = wishlistProductIds.filter(id => id && typeof id === 'string');
-  
+      const validWishlistProductIds = wishlistProductIds.filter(
+        (id) => id && typeof id === "string",
+      );
+
       if (validWishlistProductIds.length === 0) {
-        console.error('No valid product IDs to query.');
+        console.error("No valid product IDs to query.");
+        setWishlistProducts([]);
         return;
       }
-  
+
       const queryString = `
         query GetProductsByIds($ids: [ID!]!) {
           nodes(ids: $ids) {
@@ -171,13 +180,15 @@ function WishlistPage() {
           }
         }
       `;
-  
+
       try {
-        console.log('Query Variables:', { ids: wishlistProductIds });
-        const response = await query(queryString, { variables: { ids: validWishlistProductIds } });
+        console.log("Query Variables:", { ids: wishlistProductIds });
+        const response = await query(queryString, {
+          variables: { ids: validWishlistProductIds },
+        });
 
         const { data, errors } = response;
-  
+
         if (errors) {
           console.error("GraphQL Errors:", errors);
         } else {
@@ -192,14 +203,12 @@ function WishlistPage() {
         console.error("Network Error:", error);
       }
     };
-  
+
     fetchData();
   }, [wishlistProductIds, query]);
-  
-  
 
-  console.log('wishlist products ', wishlistProducts);
-  console.log('wishlist product ids ', JSON.stringify(wishlistProductIds));
+  console.log("wishlist products ", wishlistProducts);
+  console.log("wishlist product ids ", JSON.stringify(wishlistProductIds));
 
   // const addToCart = async (product) => {
   //   try {
@@ -215,13 +224,13 @@ function WishlistPage() {
   const removeProduct = async (productId) => {
     const shop = new URL(shop_domain).hostname;
     console.log("removeProduct called", shop, productId);
-    console.log("ProductId: " + productId, 'fn called remove Product');
+    console.log("ProductId: " + productId, "fn called remove Product");
     try {
       const response = await fetch(`${app_url}/api/server`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'ngrok-skip-browser-warning': 'true'
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "true",
         },
         body: JSON.stringify({
           shop: shop,
@@ -237,11 +246,12 @@ function WishlistPage() {
       }
 
       const result = await response.json();
-      console.log('Product removed successfully:', result);
+      console.log("Product removed successfully:", result);
       // Refresh wishlist after removing product
+      setWishlistProductIds(prev => prev.filter(id => id !== productId));
       fetchWishlist();
     } catch (error) {
-      console.error('Error removing product:', error);
+      console.error("Error removing product:", error);
       setError(error.message);
     }
   };
@@ -251,7 +261,6 @@ function WishlistPage() {
 
   return (
     <Page title="WISHLIST PRODUCTS">
-      
       <BlockStack spacing="loose">
         {wishlistProducts.length === 0 ? (
           <Banner status="info">
@@ -259,88 +268,91 @@ function WishlistPage() {
           </Banner>
         ) : (
           <InlineStack
+            spacing="loose"
             columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}
-            spacing="extraLoose"
             padding="base"
           >
-            {wishlistProducts.map((product) => (
-              <View
-                key={product.id}
-                padding="base"
-                border="base"
-                borderRadius="large"
-                // maxInlineSize={300}
-                
-              >
-                <BlockStack spacing="tight">
-                  {/* Product Image with Link */}
-                  <Link
-                    to={`${shop_domain}/products/${product.handle}`}
-                    overlay
-                    pressed={false}
-                  >
-                    <Image
-                      source={product.images.edges[0]?.node.transformedSrc || ""}
-                      alt={product.images.edges[0]?.node.altText || product.title}
-                      aspectRatio={1}
-                      fit="cover"
-                      borderRadius="base"
-                    />
-                  </Link>
-                  {/* Product Info */}
-                  <BlockStack spacing="extraTight">
+            {wishlistProducts.map((product) => {
+              const variant = product.variants.edges[0]?.node;
+              const image = product.images.edges[0]?.node;
+
+              return (
+                <View
+                  key={product.id}
+                  padding="loose"
+                  border="base"
+                  borderRadius="large"
+                  shadow="base"
+                  maxInlineSize={250}
+                >
+                  <BlockStack spacing="tight">
+                    {/* Image */}
                     <Link
                       to={`${shop_domain}/products/${product.handle}`}
-                      tone="subdued"
-                      underline="none"
+                      overlay
                     >
-                      <TextBlock size="medium" emphasis="bold">
-                        {product.title}
-                      </TextBlock>
+                      <Image
+                        source={
+                          image?.transformedSrc ||
+                          "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+                        }
+                        alt={image?.altText || product.title}
+                        aspectRatio={1}
+                        fit="cover"
+                        // borderRadius="large"
+                      />
                     </Link>
-                   <InlineStack>
-                    {/* Pricing */}
-                    <TextBlock tone="critical" emphasis="bold">
-                      ₹{product.variants.edges[0]?.node.price.amount}
-                    </TextBlock>
-                      {/* {product.variants.edges[0]?.node.compareAtPrice && (
+
+                    {/* Title + Price */}
+                    <BlockStack spacing="extraTight">
+                      <Link
+                        to={`${shop_domain}/products/${product.handle}`}
+                        tone="subdued"
+                        underline="none"
+                      >
+                        <TextBlock size="medium" emphasis="bold">
+                          {product.title}
+                        </TextBlock>
+                      </Link>
+                      <TextBlock tone="critical" emphasis="bold">
+                        ₹{variant?.price?.amount || "0.00"}
+                      </TextBlock>
+                      {/* {variant?.compareAtPrice && (
                         <TextBlock tone="subdued" emphasis="strikethrough">
-                          ₹{product.variants.edges[0]?.node.compareAtPrice.amount}
+                          ₹{variant.compareAtPrice.amount}
                         </TextBlock>
                       )} */}
+                    </BlockStack>
+
+                    {/* Action Buttons */}
+                    <InlineStack spacing="loose" blockAlignment="center">
+                      <Button
+                        variant="secondary"
+                        size="micro"
+                        onPress={() => removeProduct(product.id)}
+                      >
+                        Remove 
+                      </Button>
+                      {variant?.id && (
+                        <Link
+                          to={`${shop_domain}/cart/${variant.id.replace(
+                            /^gid:\/\/shopify\/ProductVariant\//,
+                            "",
+                          )}:1`}
+                        >
+                          <Button variant="primary" size="micro">
+                            Buy Now
+                          </Button>
+                        </Link>
+                      )}
                     </InlineStack>
                   </BlockStack>
-
-                  {/* Action Buttons */}
-                  <InlineStack spacing="base" blockAlignment="center">
-                    <Button
-                      
-                      variant="secondary"
-                      size="micro"
-                      onPress={() => removeProduct(product.id)}
-                    >
-                      Remove
-                    </Button>
-                    <Link to={`${shop_domain}/products/${product.handle}`}>
-                    <Button
-                  variant="primary"
-                  size="micro"
-                  // onPress={() => {
-                  //   api.navigate(`${shop_domain}/products/${product.handle}`);
-                  // }}
-                >
-                  Product Page
-                </Button>
-                </Link>
-                  </InlineStack>
-                </BlockStack>
-              </View>
-            ))}
+                </View>
+              );
+            })}
           </InlineStack>
         )}
       </BlockStack>
     </Page>
   );
-  
-  
 }

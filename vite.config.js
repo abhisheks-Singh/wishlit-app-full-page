@@ -47,8 +47,9 @@ export default defineConfig({
       '.ngrok-free.app' // Allow all subdomains of ngrok-free.app
     ],
     cors: {
-      origin: '*', // Allow all origins for testing (adjust as needed)
-      preflightContinue: false // Allow preflight requests to be handled normally
+      origin: '*', // Allow all origins
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'ngrok-skip-browser-warning'],
     },
     port: Number(process.env.PORT || 3000),
     hmr: hmrConfig,

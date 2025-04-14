@@ -20,7 +20,7 @@ const shopify = shopifyApp({
   webhooks: {
     APP_UNINSTALLED: {
       deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: `https://a654-106-219-158-119.ngrok-free.app/webhooks/app/uninstalled`,
+      callbackUrl: `https://ce13-106-219-158-171.ngrok-free.app/webhooks/app/uninstalled`,
     },
   },
   hooks: {

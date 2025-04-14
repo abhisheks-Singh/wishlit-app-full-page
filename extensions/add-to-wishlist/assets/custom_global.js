@@ -11,7 +11,7 @@ $(document).ready(async function () {
 
     try {
       // Make API request to fetch wishlist with the bypass header
-      const response = await fetch(`https://a654-106-219-158-119.ngrok-free.app/api/server?shop=${shopName}&customer_Id=${customerId}`, {
+      const response = await fetch(`https://ce13-106-219-158-171.ngrok-free.app/api/server?shop=${shopName}&customer_Id=${customerId}`, {
         headers: {
           'ngrok-skip-browser-warning': 'true' // Add this header to skip the warning page
         }
@@ -63,11 +63,11 @@ $(document).ready(async function () {
     };
 
     try {
-      const response = await fetch('https://a654-106-219-158-119.ngrok-free.app/api/server', {
+      const response = await fetch('https://ce13-106-219-158-171.ngrok-free.app/api/server', {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          'ngrok-skip-browser-warning': 'true' // Add this header to skip the warning page
+          'ngrok-skip-browser-warning': 'true', // Add this header to skip the warning page
+          "Content-Type": "application/json"
         },
         body: JSON.stringify(requestData),
       });
